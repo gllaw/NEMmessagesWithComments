@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Message Board</title>
+</head>
+<style>
+	#msgForm{
+		width: 150px;
+	}
+	hr{
+		/*width: 50%;*/
+	}
+	#comForm{
+		width: 180px;
+		margin-left: 5%;
+	}
+	.ital{
+		font-style: italic;
+	}
+</style>
+<body>
+	<% if(typeof(errors) != 'undefined'){ %>
+		<% for (var x in errors){ %>
+			<%= errors[x].message %>
+		<% } %>
+	<% } %>
+	<h1>The Message Board</h1>
+	<form action="/messages" method="post">
+		<fieldset id="msgForm">
+			<legend>Post a Message</legend>
+			Name: <input type="text" name="name">
+			Message: <textarea type="text" name="content" cols="25" rows="10"></textarea>
+		    <input type="submit" value="Post a Message">
+	    </fieldset>
+	</form>
+	<% msgs.forEach(function(message){ %>
+	<!-- <% //for (var x in msgs){ %> -->
+		<hr>
+		<p>Name: <%= message.name %></p>
+		<p>Message: <%= message.content %></p>
+		<form action="/comments/<%= message._id %>" method="post"> <!--can check ID is being passed in here by inspecting element-->
+			<fieldset id="comForm">
+				<legend>Comment on this message</legend>
+				Name: <input type="text" name="name">
+				Comment: <textarea type="text" name="comment" cols="25" rows="5"></textarea>
+	    		<input type="submit" value="Comment">
+	    	</fieldset>
+		</form>
+		<p>Associated Comments:</p>
+			<ol>
+			<% message.comments.forEach(function(comment){ %>
+			<!-- <% //for (var y in msg.comments){ %> this doesn't work nested... get's all crazy and KK had to pretend he didn't know it was gonna happen =_= -->
+				<li><%= comment.name %> <span class="ital">says</span>: <%= comment.comment %></li>
+			<% }) %>
+			</ol>
+<!-- <hr> -->
+	<% }) %>	
+</body>
+</html>
